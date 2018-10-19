@@ -1,0 +1,20 @@
+{
+    "name": "lovecoding/c-receiver",
+    "description": "Receive uploaded file chunked for Slim Framework.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "j1nz",
+            "email": "lethethangdn@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0",
+        "psr/http-message": "^1.0"
+    },
+    "autoload": {
+        "psr-4": { "LoveCoding\\CReceiver\\": "src/" }
+    }
+}
