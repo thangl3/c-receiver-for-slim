@@ -64,7 +64,7 @@ class CUpReceiver
      * @param string $key
      * @return bool
      */
-    public function hasSetting($key)
+    public function hasSetting($key) : bool
     {
         return isset($this->settings[$key]);
     }
@@ -74,7 +74,7 @@ class CUpReceiver
      *
      * @return array
      */
-    public function getSettings()
+    public function getSettings() : array
     {
         return $this->settings;
     }
@@ -108,12 +108,12 @@ class CUpReceiver
      * Set get properties of uploader
      *******************************************************************************/
 
-    public function getSettingParameters()
+    public function getSettingParameters() : array
     {
     	return $this->settings['parameters'];
     }
 
-    public function hasSettingParameter($key)
+    public function hasSettingParameter($key) : bool
     {
     	return isset($this->settings['parameters'][$key]);
     }
@@ -134,7 +134,7 @@ class CUpReceiver
      * Main function - when user call function it will be automatic recieve and upload file from client
      * @return Response $response | return response to client
      */
-    public function process()
+    public function process() : Response
     {
     	$this->parseRequestParameter();
 
@@ -182,18 +182,18 @@ class CUpReceiver
      */
     private function parseRequestParameter()
     {
-    	$paramIndentifier = $this->getSettingParameter('identifier');
-    	$paramFileName = $this->getSettingParameter('fileName');
-    	$paramChunkedNumber = $this->getSettingParameter('chunkedNumber');
-    	$paramChunkedSize = $this->getSettingParameter('chunkedSize');
-    	$paramTotalFileSize = $this->getSettingParameter('totalFileSize');
-    	$paramTotalChunkOfFile = $this->getSettingParameter('numberChunkedOfFile');
+    	$paramIndentifier       = $this->getSettingParameter('identifier');
+    	$paramFileName          = $this->getSettingParameter('fileName');
+    	$paramChunkedNumber     = $this->getSettingParameter('chunkedNumber');
+    	$paramChunkedSize       = $this->getSettingParameter('chunkedSize');
+    	$paramTotalFileSize     = $this->getSettingParameter('totalFileSize');
+    	$paramTotalChunkOfFile  = $this->getSettingParameter('numberChunkedOfFile');
 
-    	$this->indentifier = $this->request->getParam($paramIndentifier);
-    	$this->fileName = $this->request->getParam($paramFileName);
-    	$this->chunkedNumber = $this->request->getParam($paramChunkedNumber);
-    	$this->chunkedSize = $this->request->getParam($paramChunkedSize);
-    	$this->totalFileSize = $this->request->getParam($paramTotalFileSize);
-    	$this->numberChunkedOfFile = $this->request->getParam($paramTotalChunkOfFile);
+    	$this->indentifier          = (string) $this->request->getParam($paramIndentifier);
+    	$this->fileName             = (string) $this->request->getParam($paramFileName);
+    	$this->chunkedNumber        = (int) $this->request->getParam($paramChunkedNumber);
+    	$this->chunkedSize          = $this->request->getParam($paramChunkedSize);
+    	$this->totalFileSize        = $this->request->getParam($paramTotalFileSize);
+    	$this->numberChunkedOfFile  = (int) $this->request->getParam($paramTotalChunkOfFile);
     }
 }

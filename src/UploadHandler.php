@@ -20,7 +20,8 @@ class UploadHandler
 
     private $uploadIO;
 
-    public function __construct($pathTemporaryDirectory, $pathSaveFileDirectory, $indentifier, $originalFileName, $numberChunkedOfFile)
+    public function __construct(string $pathTemporaryDirectory, string $pathSaveFileDirectory,
+        string $indentifier, string $originalFileName, int $numberChunkedOfFile)
     {
         $this->pathTemporaryDirectory = $pathTemporaryDirectory;
         $this->pathSaveFileDirectory = $pathSaveFileDirectory;
@@ -28,7 +29,7 @@ class UploadHandler
         $this->originalFileName = $originalFileName;
         $this->numberChunkedOfFile = $numberChunkedOfFile;
 
-        $this->fileName = $this->removeFileExtension($originalFileName);
+        $this->fileName = $this->extractFileExtension($originalFileName);
         $this->fileExtension = $this->getFileExtension($originalFileName);
 
         $this->uploadIO = new UploadIO();
@@ -39,7 +40,7 @@ class UploadHandler
      * @param  String $fileName full name of file
      * @return String           extension of file
      */
-    public function getFileExtension($fileName)
+    public function getFileExtension(string $fileName) : string
     {
         $parts = @explode('.', @basename($fileName));
 
@@ -51,9 +52,9 @@ class UploadHandler
      * @param  String $fileName Original file name
      * @return String           File name without extension
      */
-    public function removeFileExtension($fileName)
+    public function extractFileExtension(string $fileName) : string
     {
-    	return @str_replace(sprintf('.%s', $this->getFileExtension($fileName)), '', $fileName);
+    	return str_replace(sprintf('.%s', $this->getFileExtension($fileName)), '', $fileName);
     }
 
     /**
@@ -61,19 +62,19 @@ class UploadHandler
      * @param  Integer $partIndex Number of part has been uploaded
      * @return String             Path to file
      */
-	public function pathTemporaryFileGenerator($partIndex)
+	public function pathTemporaryFileGenerator(int $partIndex) : string
     {
-        return $this->getPathTemporaryDirectory() .'/' .$this->fileName .'_part_' .$partIndex;
+        return $this->getPathTemporaryDirectory() .DIRECTORY_SEPARATOR .$this->fileName .'_part_' .$partIndex;
     }
 
-    public function pathSaveFileGenerator()
+    public function pathSaveFileGenerator() : string
     {
-        return $this->getPathSaveFileDirectory() .'/' .$this->originalFileName;
+        return $this->getPathSaveFileDirectory() .DIRECTORY_SEPARATOR .$this->originalFileName;
     }
 
-    public function getPathTemporaryDirectory()
+    public function getPathTemporaryDirectory() : string
     {
-        $dir = $this->pathTemporaryDirectory .'/' .$this->indentifier;
+        $dir = $this->pathTemporaryDirectory .DIRECTORY_SEPARATOR .$this->indentifier;
 
         return $dir;
     }
@@ -117,7 +118,7 @@ class UploadHandler
      * @param  UploadedFileInterface  $uploadedFile  Get path of file upload from client
      * @param  Integer                $chunkedNumber Number of part
      */
-	public function receiveUploadChunked(UploadedFileInterface $uploadedFile, $chunkedNumber)
+	public function receiveUploadChunked(UploadedFileInterface $uploadedFile, int $chunkedNumber)
     {
         try {
         	$this->uploadIO->writeToTemporary(
@@ -136,7 +137,8 @@ class UploadHandler
      * @param  Integer  $chunkedNumber part of temporary files
      * @return Boolean                 true if chunked has been uploaded, else
      */
-    public function isChunkedFileUploaded($chunkedNumber) {
+    public function isChunkedFileUploaded(int $chunkedNumber) : bool
+    {
     	return @is_uploaded_file($this->pathTemporaryFileGenerator($chunkedNumber));
     }
 
@@ -144,7 +146,8 @@ class UploadHandler
      * Check whever upload file is done?
      * @return boolean  True or False
      */
-    public function isUploadedFile() {
+    public function isUploadedFile() : bool
+    {
     	return @is_uploaded_file($this->pathSaveFileGenerator());
     }
 }

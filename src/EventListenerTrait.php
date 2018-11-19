@@ -20,7 +20,7 @@ trait EventListenerTrait
      * @param  String $event Events from event list had declared
      * @return mixed         Return callable if event has exist, else
      */
-    public function getEventListener($event)
+    public function getEventListener(string $event)
     {
         if (isset($this->events[$event])) {
             return $this->events[$event];
@@ -34,7 +34,8 @@ trait EventListenerTrait
      * @param String   $event    Name of event must have in event list had declare
      * @param callable $callable The function for callback
      */
-    public function addEventListener($event, callable $callable) {
+    public function addEventListener(string $event, callable $callable)
+    {
         $this->events[$event] = $callable;
     }
 
@@ -44,7 +45,8 @@ trait EventListenerTrait
      * @param  mixed $eventCallback  The arguments will pass in callback of event
      * @return mixed                 Return of callback
      */
-    public function callEventListener($event, $eventCallback = null) {
+    public function callEventListener(string $event, $eventCallback = null)
+    {
         $callable = $this->getEventListener($event);
 
         if ( is_callable($callable) ) {

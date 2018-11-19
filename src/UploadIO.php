@@ -15,11 +15,11 @@ class UploadIO {
      * @return Boolean                        Check move from temp in system to custom temp folder of
      *                                        user will be OK?
      */
-    public function writeToTemporary($uploadedFilePath, $pathTemporaryDirectory, $pathTemporaryFile)
+    public function writeToTemporary($uploadedFilePath, $pathTemporaryDirectory, $pathTemporaryFile) : bool
     {
         UploadHelper::createMultipleFolder($pathTemporaryDirectory);
 
-        move_uploaded_file($uploadedFilePath, $pathTemporaryFile);
+        return @move_uploaded_file($uploadedFilePath, $pathTemporaryFile);
     }
 
     /**
@@ -29,14 +29,14 @@ class UploadIO {
      * @param  String $pathSaveFile      [description]
      * @param  String $pathTemporaryFile [description]
      */
-    public function createFileFromChunked($pathSaveDirectory, $pathSaveFile, $pathTemporaryFile)
+    public function createFileFromChunked(string $pathSaveDirectory, string $pathSaveFile, string $pathTemporaryFile)
     {
         UploadHelper::createMultipleFolder($pathSaveDirectory);
         UploadHelper::checkWritePermissionDirectory($pathSaveDirectory);
 
-        $fwSaveFile = fopen($pathSaveFile, 'a+');
-        fwrite( $fwSaveFile, file_get_contents($pathTemporaryFile) );
-        fclose($fwSaveFile);
+        $fwSaveFile = @fopen($pathSaveFile, 'a+');
+        @fwrite( $fwSaveFile, @file_get_contents($pathTemporaryFile) );
+        @fclose($fwSaveFile);
     }
 
     /**
@@ -44,13 +44,15 @@ class UploadIO {
      *
      * @param string $file
      */
-    public function deleteFile($file) {
-        if (file_exists($file)) {
-            unlink($file);
+    public function deleteFile(string $file)
+    {
+        if (@file_exists($file)) {
+            @unlink($file);
         }
     }
     
-    public function removeFolder($pathToFolder) {
+    public function removeFolder(string $pathToFolder)
+    {
         UploadHelper::removeFolder($pathToFolder);
     }
 }
